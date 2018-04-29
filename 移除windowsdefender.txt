@@ -1,0 +1,29 @@
+微软发布Win10系统以后，入手Surface Pro 3、Surface Pro 4之后，会习惯性的做几件事，其中的一件事就是彻底关闭Windows Defender。现在来看，明年春天的 Surface Pro 5 还是得需要做这步，微软看起来没有要在设置中提供彻底关闭Windows Defender开关选项的打算。
+
+Win10（含家庭中文版）不用组策略如何彻底禁止Windows Defender开机启动
+
+这篇文章主要谈论的就是如何彻底禁止和关闭Windows 10里面的Windows Defender，主要适合的读者人群是和我类似，不喜欢用任何杀毒软件的人，不喜欢“无用”的软件进程来占用CPU和硬盘读写，实际上，Windows Defender 在工作起来发飙的时候，CPU和硬盘读写占用都会暴涨导致电脑卡顿。
+
+至于新手朋友们，因为Windows当前的机制是使用了第三方杀毒软件后会自动禁止Windows Defender，所以，喜欢第三方杀软的朋友们不需要考虑此文，不喜欢裸奔的朋友请绕路即可。当然我相信，如果个人电脑技能和使用习惯都比较好的情况下，告别杀软而裸奔是个令人愉悦的事情。
+
+步入正题，Windows 10专业版等各版本（含家庭中文版）如何彻底禁止Windows Defender开机启动？现在如果你在网上搜索，几乎千篇一律的都是告诉你用组策略的方法去实现（运行gpedit.msc），但是如果你在使用家庭版，那么尴尬来了，所有的攻略几乎你都用不了，因为Win10家庭中文版里面没有预置组策略，当然你可以选择升级到专业版，但这对新手而言并没太多的实际意义，家庭版对日常使用实际已经足够。
+
+那么，在不使用和无法使用组策略的情况下，我们依然可以通过注册表命令方式来禁止Windows Defender开机自动运行，彻底关闭它，方式如下：
+
+打开“命令提示符（管理员）”，然后输入：
+
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v "DisableAntiSpyware" /d 1 /t REG_DWORD /f
+
+重启电脑即可生效，从此世界清净了。
+
+对新手的图示如下：
+
+Win10（含家庭中文版）不用组策略如何彻底禁止Windows Defender开机启动
+
+Win10（含家庭中文版）不用组策略如何彻底禁止Windows Defender开机启动
+
+在重启电脑之后，可以看到各种Windows Defender相关的进程都没了，设置中的“Windows Defender”里面的各种功能也处于灰禁状态了，如下图所示。
+
+Win10（含家庭中文版）不用组策略如何彻底禁止Windows Defender开机启动
+
+那么如果你有天又要吃反悔药怎么办？IT之家还要再写篇文章？其实懂注册表的大家一定知道办法的，这儿啰嗦一下，Win键+R，运行 regedit 打开注册表编辑器，定位到 HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender 这儿，删掉 DisableAntiSpyware 这个键值即可。当然你更可以打开命令提示符（管理员），运行reg delete指令，殊途同归……
